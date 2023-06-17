@@ -1036,8 +1036,9 @@ export class Deck {
 
         if (modal.ignoreStats) {
             // Same for mobile/desktop
-            modal.impossibleBtn.setText(`${modal.plugin.data.settings.flashcardHardText}`);
+            modal.impossibleBtn.setText(`${modal.plugin.data.settings.flashcardImpossibleText}`);
             modal.hardBtn.setText(`${modal.plugin.data.settings.flashcardHardText}`);
+            modal.goodBtn.setText(`${modal.plugin.data.settings.flashcardGoodText}`);
             modal.easyBtn.setText(`${modal.plugin.data.settings.flashcardEasyText}`);
         } else if (Platform.isMobile) {
             modal.impossibleBtn.setText(textInterval(impossibleInterval, true));
@@ -1084,8 +1085,6 @@ export class Deck {
     static comparator(a: Card, b: Card): number {
         // New cards are reviewed after due cards.
         if (!a.isDue && !b.isDue) return 0;
-        if (a.isDue && !b.isDue) return -1;
-        if (!a.isDue && b.isDue) return 1;
 
         const now = window.moment(Date.now()).valueOf();
 
@@ -1097,7 +1096,7 @@ export class Deck {
             return aReviewDelay < bReviewDelay ? -1 : 1;
         }
 
-        // One redue, other is due
+        // One redue, other is due or new
         if (a.isReDue) {
             const aDiff = now - a.previousReview + a.interval * 60 * 1000;
             return aDiff > 0 ? 1 : -1;
